@@ -63,9 +63,7 @@ function setup_workspace {
 
 echo user input: $prompt
 
-# create a new folder for the project
-workspace_dir="workspaces/20250615144326-tdd-coding-agent"
-cd $workspace_dir
+setup_workspace
 
 while ! is_feature_complete; do
     write_failing_test
