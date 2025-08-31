@@ -9,7 +9,7 @@ set -x
 prompt=$1
 
 function is_feature_complete {
-    p="Given the following user input: $prompt\n\n and the following tests: $(cat index.test.js) is the feature complete? Answer with FEATURE_COMPLETE for yes and FEATURE_NOT_COMPLETE for no."
+    p="You are a TDD coding agent evaluating whether a feature is complete. This is the feature being developed:\n$prompt\n\n Do the tests in index.test.js fully specify the behaviour or is there more tests missing? Answer with FEATURE_COMPLETE for yes and FEATURE_NOT_COMPLETE for no."
     claude_ouput=$(claude -p "$p")
     if [[ $claude_ouput == *"FEATURE_COMPLETE"* ]]; then
         return 0
@@ -23,9 +23,9 @@ function setup_test_framework {
 }
 
 function write_failing_test {
-    echo "Writing a failing test..."    
-    
-    claude -p "given the following user input: $prompt\n\n and the following tests $(cat index.test.js)\n\n and the following code $(cat index.js)\n\n write a test that fails in the index.test.js file. It should be only a single test case added to the previous tests. Make sure the test doesn't specify a conflicting requirement with the previous tests."
+    echo "Writing a failing test..."
+
+    claude -p "You are a TDD coding agent writing a failing test. This is the feature being developed:\n$prompt\n\n Analyse the tests in index.test.js and the implementation in index.js. Add a single test to index.test.js that fails in the index.test.js file. It should be only a single test case added to the previous tests. Make sure the test doesn't specify a conflicting requirement with the previous tests."
 }
 
 function run_test {
@@ -38,14 +38,14 @@ function fix_failing_test {
     echo "Fixing the failing test..."
 
     read -r test_result
-    
-    claude -p "given the following user input: $prompt\n\n and the following tests $(cat index.test.js)\n\nthe following test result: $test_result and the following code $(cat index.js)\n\n write the minimum code to pass the test in the index.js file. Make sure the code is minimal and only addresses the failing test."
+
+    claude -p "You are a TDD coding agent fixing a failing test. This is the feature being developed:\n$prompt\n\n Read the tests from index.test.js. These are the test results: $test_result\n\nWrite the minimal code in index.js that would make the tests pass. Make sure the code is minimal and only addresses the failing test."
 }
 
 function refactor_code {
     echo "Refactoring the code..."
 
-    claude -p "given the following user input: $prompt\n\n and the following tests $(cat index.test.js)\n\nand the following code $(cat index.js)\n\n refactor the code in the index.js file if necessary. Keep the code simple, clean and maintainable, ensuring it adheres to best practices like Clean Code. If not necessary, do not change the code."
+    claude -p "You are a TDD coding agent refactoring code. This is the feature being developed:\n$prompt\n\nAnalyze the tests in index.test.js and the following code in index.js. Then refactor the code in the index.js file if necessary. Keep the code simple, clean and maintainable, ensuring it adheres to best practices like Clean Code. If not necessary, do not change the code."
 }
 
 function setup_workspace {
