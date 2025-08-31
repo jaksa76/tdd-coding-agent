@@ -1,12 +1,12 @@
 #!/bin/bash
 
 PROMPT_DIR="prompts"
-AGENT="./tdd.sh"
+AGENT="${1:-tdd.sh}"
 pids=()
 
 for prompt_file in "$PROMPT_DIR"/*.txt; do
   (
-    $AGENT "$prompt_file"
+    ./$AGENT "$prompt_file"
   ) &
   pids+=($!)
 done

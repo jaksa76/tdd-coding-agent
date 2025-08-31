@@ -17,11 +17,6 @@ function is_feature_complete {
     return 1
 }
 
-function setup_test_framework {
-    echo "Setting up the test framework..."
-    npm install --save-dev vitest
-}
-
 function write_failing_test {
     echo "Writing a failing test..."
 
@@ -57,7 +52,7 @@ function setup_workspace {
     touch index.js
     touch index.test.js
     npm init -y
-    setup_test_framework
+    npm install --save-dev vitest
     echo $workspace_dir
 }
 
