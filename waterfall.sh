@@ -27,7 +27,7 @@ function design_solution {
 }
 
 function implement_solution {
-    claude -p "You are a coding agent implementing a solution. This is the feature being developed:\n$prompt\n\nBased on the requirements in requirements.txt and the design in design.txt, implement the solution and write the tests."
+    claude -p "You are a coding agent implementing a solution. This is the feature being developed:\n$prompt\n\nBased on the requirements in requirements.txt and the design in design.txt, implement the solution, write the tests and make sure they pass. Use import instead of require. Use vitest for testing."
 }
 
 setup_workspace

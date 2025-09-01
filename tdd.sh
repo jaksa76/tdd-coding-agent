@@ -20,7 +20,7 @@ function is_feature_complete {
 function write_failing_test {
     echo "Writing a failing test..."
 
-    claude -p "You are a TDD coding agent writing a failing test. This is the feature being developed:\n$prompt\n\n Analyse the tests in index.test.js and the implementation in index.js. Add a single test to index.test.js that fails in the index.test.js file. It should be only a single test case added to the previous tests. Make sure the test doesn't specify a conflicting requirement with the previous tests."
+    claude -p "You are a TDD coding agent writing a failing test. This is the feature being developed:\n$prompt\n\n Analyse the tests in index.test.js and the implementation in index.js. Add a single test to index.test.js that fails in the index.test.js file. It should be only a single test case added to the previous tests. Make sure the test doesn't specify a conflicting requirement with the previous tests. Use import instead of require. Use vitest for testing."
 }
 
 function run_test {
