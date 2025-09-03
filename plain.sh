@@ -21,4 +21,4 @@ echo user input: "$prompt"
 
 setup_workspace
 
-claude -p "$prompt"
+claude -p "$prompt Use import instead of require. Use vitest for testing."
