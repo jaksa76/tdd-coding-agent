@@ -53,7 +53,7 @@ function setup_workspace {
     touch index.test.js
     npm init -y
     npm install --save-dev vitest
-    npm pkg set scripts.test="vitest"
+    npm pkg set scripts.test="vitest run"
     echo $workspace_dir
 }
 
