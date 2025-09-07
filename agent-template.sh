@@ -10,8 +10,8 @@ Runs this workflow
 OPTIONS:
     --agent-cmd <cmd>     Command to run the agent (default: claude -p)
     --workspace|-w <dir>  Use existing workspace directory
-    --input <file>        Input file to process
-    --output <file>       Output file to write results
+    --main-file <file>    Main source file to process
+    --test-file <file>    Test file to process
     -x <instruction>      Add extra instruction (can be used multiple times)
     --help                Show this help message
 
@@ -23,6 +23,7 @@ EXAMPLES:
     $0 --workspace ./my-workspace "Add unit tests"
     $0 -x "Use TypeScript" "Create a todo app"
     $0 --agent-cmd "codex -p" "Implement sorting algorithm"
+    $0 --main-file "src/calculator.js" --test-file "test/calculator.test.js" "Create a calculator function"
 
 ENVIRONMENT VARIABLES:
     AGENT_CMD            Default agent command (overridden by --agent-cmd)
@@ -33,8 +34,8 @@ EOF
 AGENT_CMD_ARG=""
 PROMPT_ARG=""
 WORKSPACE_ARG=""
-INPUT_FILE=""
-OUTPUT_FILE=""
+MAIN_FILE=""
+TEST_FILE=""
 EXTRA_INSTRUCTIONS=()
 
 # Check for help or no arguments
@@ -57,12 +58,12 @@ while [[ $# -gt 0 ]]; do
             WORKSPACE_ARG="$2"
             shift 2
             ;;
-        --input)
-            INPUT_FILE="$2"
+        --test-file)
+            TEST_FILE="$2"
             shift 2
             ;;
-        --output)
-            OUTPUT_FILE="$2"
+        --main-file)
+            MAIN_FILE="$2"
             shift 2
             ;;
         -x)
