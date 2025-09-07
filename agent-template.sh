@@ -1,6 +1,34 @@
 #!/bin/bash
 set -x
 
+function show_usage {
+    cat << EOF
+Usage: $0 [OPTIONS] <prompt>
+
+Runs this workflow
+
+OPTIONS:
+    --agent-cmd <cmd>     Command to run the agent (default: claude -p)
+    --workspace|-w <dir>  Use existing workspace directory
+    --input <file>        Input file to process
+    --output <file>       Output file to write results
+    -x <instruction>      Add extra instruction (can be used multiple times)
+    --help                Show this help message
+
+ARGUMENTS:
+    <prompt>             The prompt to send to the agent
+
+EXAMPLES:
+    $0 "Create a calculator function"
+    $0 --workspace ./my-workspace "Add unit tests"
+    $0 -x "Use TypeScript" "Create a todo app"
+    $0 --agent-cmd "codex -p" "Implement sorting algorithm"
+
+ENVIRONMENT VARIABLES:
+    AGENT_CMD            Default agent command (overridden by --agent-cmd)
+EOF
+}
+
 # Parse command line arguments
 AGENT_CMD_ARG=""
 PROMPT_ARG=""
@@ -9,8 +37,18 @@ INPUT_FILE=""
 OUTPUT_FILE=""
 EXTRA_INSTRUCTIONS=()
 
+# Check for help or no arguments
+if [[ $# -eq 0 ]]; then
+    show_usage
+    exit 0
+fi
+
 while [[ $# -gt 0 ]]; do
     case $1 in
+        --help|-h)
+            show_usage
+            exit 0
+            ;;
         --agent-cmd)
             AGENT_CMD_ARG="$2"
             shift 2
@@ -37,6 +75,14 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+# Check if prompt was provided
+if [ -z "$PROMPT_ARG" ]; then
+    echo "Error: No prompt provided"
+    echo
+    show_usage
+    exit 1
+fi
 
 prompt=$PROMPT_ARG
 
