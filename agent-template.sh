@@ -4,11 +4,16 @@ set -x
 # Parse command line arguments
 AGENT_CMD_ARG=""
 PROMPT_ARG=""
+WORKSPACE_ARG=""
 
 while [[ $# -gt 0 ]]; do
     case $1 in
         --agent-cmd)
             AGENT_CMD_ARG="$2"
+            shift 2
+            ;;
+        --workspace|-w)
+            WORKSPACE_ARG="$2"
             shift 2
             ;;
         *)
@@ -38,8 +43,22 @@ function setup_workspace {
     npm init -y
     npm install --save-dev vitest
     npm pkg set scripts.test="vitest run"
-    echo $workspace_dir``
+    echo $workspace_dir
 }
+
+# Handle workspace: use specified or create new one
+if [ -n "$WORKSPACE_ARG" ]; then
+    workspace_dir="$WORKSPACE_ARG"
+    if [ ! -d "$workspace_dir" ]; then
+        echo "Error: Specified workspace directory '$workspace_dir' does not exist"
+        exit 1
+    fi
+    cd "$workspace_dir"
+    echo "Using existing workspace: $workspace_dir"
+else
+    workspace_dir=$(setup_workspace)
+    echo "Created new workspace: $workspace_dir"
+fi
 
 echo user input: $prompt
 
