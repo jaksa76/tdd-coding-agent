@@ -5,6 +5,8 @@ set -x
 AGENT_CMD_ARG=""
 PROMPT_ARG=""
 WORKSPACE_ARG=""
+INPUT_FILE=""
+OUTPUT_FILE=""
 EXTRA_INSTRUCTIONS=()
 
 while [[ $# -gt 0 ]]; do
@@ -15,6 +17,14 @@ while [[ $# -gt 0 ]]; do
             ;;
         --workspace|-w)
             WORKSPACE_ARG="$2"
+            shift 2
+            ;;
+        --input)
+            INPUT_FILE="$2"
+            shift 2
+            ;;
+        --output)
+            OUTPUT_FILE="$2"
             shift 2
             ;;
         -x)
