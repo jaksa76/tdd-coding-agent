@@ -34,7 +34,7 @@ function fix_failing_test {
 
     read -r test_result
 
-    claude -p "You are a TDD coding agent fixing a failing test. This is the feature being developed:\n$prompt\n\n Read the tests from index.test.js. These are the test results: $test_result\n\nWrite the minimal code in index.js that would make the tests pass. Make sure the code is minimal and only addresses the failing test."
+    claude -p "You are a TDD coding agent fixing a failing test. This is the feature being developed:\n$prompt\n\n Read the tests from index.test.js. These are the test results: $test_result\n\nWrite the minimal code in index.js that would make the tests pass. Make sure the code is minimal and only addresses the failing test. Make sure that no other tests are broken."
 }
 
 function refactor_code {
