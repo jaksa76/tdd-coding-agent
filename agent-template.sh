@@ -30,6 +30,32 @@ ENVIRONMENT VARIABLES:
 EOF
 }
 
+function check_tool {
+    local tool="$1"
+    if ! command -v "$tool" &> /dev/null; then
+        echo "Error: Required tool '$tool' is not installed or not in PATH"
+        return 1
+    fi
+    return 0
+}
+
+function check_required_tools {
+    local tools=("$@")
+    local missing_tools=()
+    
+    for tool in "${tools[@]}"; do
+        if ! check_tool "$tool"; then
+            missing_tools+=("$tool")
+        fi
+    done
+    
+    if [ ${#missing_tools[@]} -gt 0 ]; then
+        echo "Missing required tools: ${missing_tools[*]}"
+        echo "Please install the missing tools and try again."
+        exit 1
+    fi
+}
+
 # Parse command line arguments
 AGENT_CMD_ARG=""
 PROMPT_ARG=""
@@ -84,6 +110,25 @@ if [ -z "$PROMPT_ARG" ]; then
     show_usage
     exit 1
 fi
+
+# Check for required tools early
+required_tools=()
+
+# Extract the base command from AGENT_CMD to check if it's available
+if [ -n "$AGENT_CMD_ARG" ]; then
+    base_cmd=$(echo "$AGENT_CMD_ARG" | awk '{print $1}')
+elif [ -n "$AGENT_CMD" ]; then
+    base_cmd=$(echo "$AGENT_CMD" | awk '{print $1}')
+else
+    base_cmd="claude"
+fi
+
+required_tools+=("$base_cmd")
+
+# Add other commonly used tools
+required_tools+=("git" "curl")
+
+check_required_tools "${required_tools[@]}"
 
 prompt=$PROMPT_ARG
 
