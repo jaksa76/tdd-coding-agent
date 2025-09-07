@@ -5,6 +5,7 @@ set -x
 AGENT_CMD_ARG=""
 PROMPT_ARG=""
 WORKSPACE_ARG=""
+EXTRA_INSTRUCTIONS=()
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -16,6 +17,10 @@ while [[ $# -gt 0 ]]; do
             WORKSPACE_ARG="$2"
             shift 2
             ;;
+        -x)
+            EXTRA_INSTRUCTIONS+=("$2")
+            shift 2
+            ;;
         *)
             PROMPT_ARG="$1"
             shift
@@ -24,6 +29,15 @@ while [[ $# -gt 0 ]]; do
 done
 
 prompt=$PROMPT_ARG
+
+# Concatenate extra instructions if provided
+if [ ${#EXTRA_INSTRUCTIONS[@]} -gt 0 ]; then
+    extra_instructions_text=$(printf '%s\n' "${EXTRA_INSTRUCTIONS[@]}")
+    prompt="$prompt
+
+Extra instructions:
+$extra_instructions_text"
+fi
 
 # Set agent command: command line arg > env var > default
 if [ -n "$AGENT_CMD_ARG" ]; then
@@ -62,4 +76,4 @@ fi
 
 echo user input: $prompt
 
-$AGENT_CMD $prompt
+$AGENT_CMD "$prompt $EXTRA_INSTRUCTIONS"
