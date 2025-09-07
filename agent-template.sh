@@ -103,20 +103,6 @@ elif [ -z "$AGENT_CMD" ]; then
     AGENT_CMD="claude -p"
 fi
 
-function setup_workspace {
-    workspace_dir="./workspaces/$(date +%Y%m%d%H%M%S)-tdd-coding-agent"
-    mkdir -p $workspace_dir
-    mkdir -p $workspace_dir/.claude
-    cp claude-settings-template.json $workspace_dir/.claude/settings.json
-    cd $workspace_dir
-    touch index.js
-    touch index.test.js
-    npm init -y
-    npm install --save-dev vitest
-    npm pkg set scripts.test="vitest run"
-    echo $workspace_dir
-}
-
 # Handle workspace: use specified or create new one
 if [ -n "$WORKSPACE_ARG" ]; then
     workspace_dir="$WORKSPACE_ARG"
@@ -126,9 +112,6 @@ if [ -n "$WORKSPACE_ARG" ]; then
     fi
     cd "$workspace_dir"
     echo "Using existing workspace: $workspace_dir"
-else
-    workspace_dir=$(setup_workspace)
-    echo "Created new workspace: $workspace_dir"
 fi
 
 echo user input: $prompt
